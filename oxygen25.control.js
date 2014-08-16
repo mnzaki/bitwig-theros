@@ -169,24 +169,32 @@ var globalMappings =
 {
   on: controls.play,
   always: true,
-  callback: function (idx, chan, cc, val, hist) { views.transport.play() }
+  callback: function (idx, chan, cc, val, hist) {
+    if (val > 0) views.transport.play();
+  }
 },
 {
   on: controls.stop,
   always: true,
-  callback: function (idx, chan, cc, val, hist) { views.transport.stop() }
+  callback: function (idx, chan, cc, val, hist) {
+    if (val > 0) views.transport.stop();
+  }
 },
 {
   on: controls.loop,
   always: true,
-  callback: function (idx, chan, cc, val, hist) { views.transport.toggleLoop() }
+  callback: function (idx, chan, cc, val, hist) {
+    if (val > 0) views.transport.toggleLoop();
+  }
 },
 {
   on: controls.rec,
   always: true,
   callback: function (idx, chan, cc, val, hist) {
-    views.cursorTrack.getArm().set(true);
-    views.transport.record();
+    if (val > 0) {
+      views.cursorTrack.getArm().set(true);
+      views.transport.record();
+    }
   }
 }];
 
