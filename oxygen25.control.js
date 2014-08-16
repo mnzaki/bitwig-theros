@@ -269,6 +269,7 @@ function Page(pageDesc, chan) {
 }
 
 function ControlPages(globalMappings, channelPages) {
+  // setup state
   this.enabled = false;
   var globalpageDesc = {name: 'Global', mappings: globalMappings};
   this.globalPage = new Page(globalpageDesc, 0);
@@ -277,13 +278,20 @@ function ControlPages(globalMappings, channelPages) {
   this.currentPageIdx = new Array(16);
   for (var i = 0; i < this.currentPageIdx.length; i++)
     this.currentPageIdx[i] = 0;
-
   this.currentPage = null;
   this.ccValHistory = {};
 
+  // register the pages
+  for (var chan in channelPages)
+    for (var p in channelPages[chan])
+      this.registerPage(chan, channelPages[chan][p]);
+
+  this.selectPage(0, 0);
+
+  // create user controls
   this.userControls = host.createUserControls((HIGHEST_CC - LOWEST_CC + 1)*16);
 
-  // Label the controls
+  // label them
   for (var cc = LOWEST_CC; cc <= HIGHEST_CC; cc++) {
     for (var chan = 0; chan < 16; chan++)
       this.getUserControl(chan, cc).setLabel("CC"+cc);
@@ -298,11 +306,11 @@ function ControlPages(globalMappings, channelPages) {
     }
   }
 
-  for (var chan in channelPages)
-    for (var p in channelPages[chan])
-      this.registerPage(chan, channelPages[chan][p]);
-
-  this.selectPage(0, 0);
+  // add observers
+  var self = this;
+  views.application.addSelectedModeObserver(function (mode) {
+    self.currentMode = mode;
+  }, 100, "Unknown");
 }
 
 ControlPages.prototype.registerPage = function (chan, pageDesc) {
