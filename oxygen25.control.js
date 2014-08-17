@@ -110,9 +110,6 @@ var mixerPages =
   }]
 },
 {
-  name: 'Mixer - Send'
-},
-{
   name: 'Mixer - Pan',
   mappings:
   [{
@@ -135,7 +132,7 @@ var globalMappings =
 [{
   on: controls.c10,
   always: true, // call even when controls are disabled!
-  callback: function (idx, chan, cc, val, hist) {
+  callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) {
       views.controlPages.setEnabled(false);
     } else {
@@ -150,28 +147,28 @@ var globalMappings =
 {
   on: controls.play,
   always: true,
-  callback: function (idx, chan, cc, val, hist) {
+  callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) views.transport.play();
   }
 },
 {
   on: controls.stop,
   always: true,
-  callback: function (idx, chan, cc, val, hist) {
+  callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) views.transport.stop();
   }
 },
 {
   on: controls.loop,
   always: true,
-  callback: function (idx, chan, cc, val, hist) {
+  callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) views.transport.toggleLoop();
   }
 },
 {
   on: controls.rec,
   always: true,
-  callback: function (idx, chan, cc, val, hist) {
+  callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) {
       views.cursorTrack.getArm().set(true);
       views.transport.record();
