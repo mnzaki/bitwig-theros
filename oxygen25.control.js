@@ -30,7 +30,7 @@ var views = {
   transport: null,
   trackBank: null,
   cursorTrack: null,
-  primaryInstrument: null,
+  primaryDevice: null,
   cursorDevice: null,
   masterTrack: null,
 
@@ -89,7 +89,7 @@ var separateDevicePages =
   [{
     on: controls.knobs,
     control: function (chan, idx) {
-      return views.primaryInstrument.getMacro(idx).getAmount();
+      return views.primaryDevice.getMacro(idx).getAmount();
     }
   }]
 },
@@ -206,7 +206,7 @@ function init() {
   views.transport = host.createTransport();
   views.trackBank = host.createTrackBank(8, 1, 0);
   views.cursorTrack = host.createCursorTrack(2, 0);
-  views.primaryInstrument = views.cursorTrack.getPrimaryInstrument();
+  views.primaryDevice = views.cursorTrack.getPrimaryDevice();
   views.cursorDevice = host.createCursorDevice();
   views.masterTrack = host.createMasterTrack(0);
 
