@@ -39,7 +39,7 @@ var controls = {
 //               a matching CC
 //     always: true/false
 //                 if true, then mapping is active even when
-//                 ControlPages.setEnabled(false) was called
+//                 Controller.setEnabled(false) was called
 //    },
 //    .....
 //  ]
@@ -134,13 +134,13 @@ var globalMappings =
   always: true, // call even when controls are disabled!
   callback: function (idx, chan, cc, val, prevVal) {
     if (val > 0) {
-      views.controlPages.setEnabled(false);
+      views.controller.setEnabled(false);
     } else {
       // always select prev channel, because channel has
       // already changed by this point (key release)
-      chan = views.controlPages.channelHistory;
-      var page_idx = views.controlPages.currentPageIdx[chan]
-      views.controlPages.selectPage(chan, page_idx, true);
+      chan = views.controller.channelHistory;
+      var page_idx = views.controller.currentPageIdx[chan]
+      views.controller.selectPage(chan, page_idx, true);
     }
   }
 },
