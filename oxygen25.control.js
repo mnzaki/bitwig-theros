@@ -89,7 +89,7 @@ var separateDevicePages =
   [{
     on: controls.knobs,
     control: function (chan, idx) {
-      return views.primaryDevice.getMacro(idx).getAmount();
+      return views.cursorDevice.getMacro(idx).getAmount();
     }
   }]
 },
