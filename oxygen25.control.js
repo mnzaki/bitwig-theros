@@ -160,10 +160,15 @@ var globalMappings =
   on: controls.c10,
   always: true, // call even when controls are disabled!
   callback: function (idx, chan, cc, val, hist) {
-    if (val > 0)
+    if (val > 0) {
       views.controlPages.setEnabled(false);
-    else
-      views.controlPages.selectNext(chan);
+    } else {
+      // always select prev channel, because channel has
+      // already changed by this point (key release)
+      chan = views.controlPages.channelHistory;
+      var page_idx = views.controlPages.currentPageIdx[chan]
+      views.controlPages.selectPage(chan, page_idx, true);
+    }
   }
 },
 {
@@ -288,6 +293,7 @@ function ControlPages(globalMappings, channelPages) {
     this.currentPageIdx[i] = 0;
   this.currentPage = null;
   this.ccValHistory = {};
+  this.channelHistory = 0;
 
   // register the pages
   for (var chan in channelPages)
@@ -329,7 +335,7 @@ ControlPages.prototype.setEnabled = function (val) {
   this.enabled = val;
   this.indicateGUI(val);
 };
-ControlPages.prototype.selectPage = function (chan, idx) {
+ControlPages.prototype.selectPage = function (chan, idx, silent) {
   if (this.enabled) this.setEnabled(false);
   var pages = this.channelPages[chan];
   if (pages) {
@@ -342,14 +348,16 @@ ControlPages.prototype.selectPage = function (chan, idx) {
   }
   this.setEnabled(true);
 
-  var msg = "Ch" + chan;
-  if (this.currentPage)
-    msg += " Page: " + this.currentPage.name;
-  host.showPopupNotification(msg);
+  if (!silent) {
+    var msg = "Ch" + chan;
+    if (this.currentPage)
+      msg += " Page: " + this.currentPage.name;
+    host.showPopupNotification(msg);
+  }
 };
 ControlPages.prototype.selectNext = function (chan) {
   if (!chan) chan = this.currentPage.channel;
-  if (chan != this.currentPage.channel)
+  if (this.currentPage && chan != this.currentPage.channel)
     this.selectPage(chan, this.currentPageIdx[chan]);
   else
     this.selectPage(chan, this.currentPageIdx[chan]+1);
@@ -426,7 +434,8 @@ ControlPages.prototype.onMidi = function (status, data1, data2) {
     this.selectPage(chan, this.currentPageIdx[chan]);
     return this.onMidi(status, data1, data2);
   } else if (this.currentPage) {
-    // no pages in this channel
+    // there was a page in previous channel,
+    // and now no pages in this channel
     this.selectPage(chan, 0);
   }
 
@@ -438,6 +447,7 @@ ControlPages.prototype.onMidi = function (status, data1, data2) {
       this.setUserControlVal(chan, cc, val);
   }
 
-  // save cc history
+  // save history
   this.ccValHistory[cc] = val;
+  this.channelHistory = chan;
 };
