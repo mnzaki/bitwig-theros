@@ -49,7 +49,7 @@ channelPages[1] = [
 // Global Mappings are active across channels
 // if mapped in a page, the page takes precedence
 var globalMappings = [
-  Mappings.pageToggles.nextPage(controls.c10),
+  Mappings.pageToggles.pressToAdvance(controls.c10, 1),
   Mappings.transport.play(controls.play),
   Mappings.transport.stop(controls.stop),
   Mappings.transport.record(controls.rec),
