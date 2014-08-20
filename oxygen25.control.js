@@ -28,22 +28,25 @@ var controls = {
 // channels left empty will be free to be mapped live
 var channelPages = new Array(16);
 
+track_vol = Mappings.track.volume(controls.slider);
 channelPages[0] = [
   { name: 'Device - Macros',
-    mappings: [Mappings.device.macros(controls.knobs)]},
+    mappings: [Mappings.device.macros(controls.knobs), track_vol]},
   { name: 'Device - Parameters',
-    mappings: [Mappings.device.parameters(controls.knobs)]},
+    mappings: [Mappings.device.parameters(controls.knobs), track_vol]},
   { name: 'Device - Common Parameters',
-    mappings: [Mappings.device.commonParameters(controls.knobs)]},
+    mappings: [Mappings.device.commonParameters(controls.knobs), track_vol]},
   { name: 'Device - Envelope Parameters',
-    mappings: [Mappings.device.envelopeParameters(controls.knobs)]}
+    mappings: [Mappings.device.envelopeParameters(controls.knobs), track_vol]}
 ];
 
 channelPages[1] = [
   { name: 'Mixer - Volume',
-    mappings: [Mappings.mixer.volume(controls.knobs)]},
+    mappings: [Mappings.mixer.volumes(controls.knobs),
+               Mappings.masterTrack.volume(controls.slider)]},
   { name: 'Mixer - Pan',
-    mappings: [Mappings.mixer.pan(controls.knobs)]}
+    mappings: [Mappings.mixer.pans(controls.knobs),
+               Mappings.masterTrack.pan(controls.slider)]}
 ];
 
 // Global Mappings are active across channels
