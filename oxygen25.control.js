@@ -26,7 +26,6 @@ var controls = {
 
 // map each channel to a set of pages.
 // channels left empty will be free to be mapped live
-var channelPages = new Array(16);
 
 track_vol = Mappings.track.volume(controls.slider);
 channelPages[0] = [
